@@ -10,7 +10,7 @@ do
 
 SAMPLE=$(basename ${i} Aligned.sortedByCoord.out.bam)
 
-# Remove any multi-mappers (denoted by NH:i:1 in STAR output)
+# Remove any multi-mappers (keep reads denoted by NH:i:1 in STAR output)
 samtools view -H ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam > ${SAMPLE}.header.sam
 samtools view -F 4 ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam |  grep -w 'NH:i:1' | cat ${SAMPLE}.header.sam - | \
 samtools view -b - > ${ALN_DIR}/${SAMPLE}.unique.bam

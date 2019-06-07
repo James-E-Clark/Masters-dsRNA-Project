@@ -19,7 +19,7 @@ do
 
 SAMPLE=$(basename ${i} .sorted.bam)
 
-# Remove any multi-mappers (denoted by NH:i:1 in STAR output)
+# Remove any multi-mappers (keep reads denoted by NH:i:1 in STAR output)
 samtools view -H ${ALN_DIR}/${SAMPLE}.sorted.bam > ${SAMPLE}.header.sam
 samtools view -F 4 ${ALN_DIR}/${SAMPLE}.sorted.bam |  grep -w 'NH:i:1' | cat ${SAMPLE}.header.sam - | \
 samtools view -b - > ${ALN_DIR}/${SAMPLE}.unique.bam
