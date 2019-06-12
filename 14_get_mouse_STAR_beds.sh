@@ -54,4 +54,9 @@ bedtools unionbedg -i ${BED_DIR}/${i}A1.bed ${BED_DIR}/${i}A2.bed > ${i}_Adult_W
 awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5}' ${i}_Adult_WT.tmp > ${BED_DIR}/${i}_Adult_WT.merged.bed
 rm ${i}_Adult_WT.tmp
 
+echo "Merging ${i} all sample bed files..."
+bedtools unionbedg -i ${BED_DIR}/${i}_Dicer_KO.merged.bed ${BED_DIR}/${i}_WT.merged.bed ${BED_DIR}/${i}_Adult_WT.merged.bed  > ${i}_all.tmp
+awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5+$6}' ${i}_all.tmp > ${i}_all.merged.bed
+rm ${i}_all.tmp
+
 done

@@ -50,3 +50,12 @@ awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5}' ${i}.tmp >  ${BED_DIR}/${i}_w
 rm ${i}.tmp
 
 done
+
+# Merge all samples
+
+bedtools unionbedg -i ${BED_DIR}/day1_whole_testis.merged.bed ${BED_DIR}/day3_whole_testis.merged.bed \
+                      ${BED_DIR}/day7_whole_testis.merged.bed > Hilz_all.merged.tmp
+awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5+$6}' Hilz_all.merged.tmp >  ${BED_DIR}/Hilz_all.merged.bed
+rm Hilz_all.merged.tmp
+
+
