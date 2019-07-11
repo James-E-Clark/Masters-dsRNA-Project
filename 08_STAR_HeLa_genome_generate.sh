@@ -19,3 +19,4 @@ ${STAR} --runThreadN 11 \
         --sjdbGTFfile ${BASE_DIR}/genome/gencode.v29.annotation.gtf \
         --sjdbOverhang 99 \
 --limitGenomeGenerateRAM=150000000000
+

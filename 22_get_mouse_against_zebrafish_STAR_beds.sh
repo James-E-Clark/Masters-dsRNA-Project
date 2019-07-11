@@ -1,8 +1,7 @@
 #!/bin/bash
 
-ALN_DIR=mouse_STAR_alignments
-BED_DIR=mouse_STAR_bed_files
-CHR_BED=gencode.vM20.chromosomes.bed
+ALN_DIR=mouse_against_zebrafish_STAR_alignments
+BED_DIR=mouse_against_zebrafish_STAR_bed_files
 
 mkdir -p ${BED_DIR}
 
@@ -11,21 +10,17 @@ do
 
 SAMPLE=$(basename ${i} Aligned.sortedByCoord.out.bam)
 
-# Remove any multi-mappers (keep reads denoted by NH:i:1 in STAR output)
+## Remove any multi-mappers (keep only primary alignments with SAM flag 256)
 samtools view -H ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam > ${SAMPLE}.header.sam
-samtools view -F 4 ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam |  grep -w 'NH:i:1' | cat ${SAMPLE}.header.sam - | \
-samtools view -b - > ${ALN_DIR}/${SAMPLE}.unique.bam
-samtools index ${ALN_DIR}/${SAMPLE}.unique.bam
+samtools view -F 256 ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam | cat ${SAMPLE}.header.sam - > ${SAMPLE}.primary.sam
+samtools view -b ${SAMPLE}.primary.sam > ${ALN_DIR}/${SAMPLE}.primary.bam
+samtools index ${ALN_DIR}/${SAMPLE}.primary.bam
 rm ${SAMPLE}.header.sam
-#rm ${ALN_DIR}/${SAMPLE}Aligned.sortedByCoord.out.bam
+rm ${SAMPLE}.primary.sam
 
 echo "Running bedtools genomecov on sample ${SAMPLE}..."
 # Get read coverage
 bedtools genomecov -bg -ibam ${ALN_DIR}/${SAMPLE}.unique.bam > ${BED_DIR}/${SAMPLE}.bed
-
-echo "Running bedtools multicov on sample ${SAMPLE}..."
-# Get reads per chromosome
-bedtools multicov -bams ${ALN_DIR}/${SAMPLE}.unique.bam -bed genome/${CHR_BED} > ${BED_DIR}/${SAMPLE}.unique.reads.per.chr.bed
 
 done
 
@@ -53,10 +48,5 @@ echo "Merging ${i} Adult WT sample bed files..."
 bedtools unionbedg -i ${BED_DIR}/${i}A1.bed ${BED_DIR}/${i}A2.bed > ${i}_Adult_WT.tmp
 awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5}' ${i}_Adult_WT.tmp > ${BED_DIR}/${i}_Adult_WT.merged.bed
 rm ${i}_Adult_WT.tmp
-
-echo "Merging ${i} all sample bed files..."
-bedtools unionbedg -i ${BED_DIR}/${i}_Dicer_KO.merged.bed ${BED_DIR}/${i}_WT.merged.bed ${BED_DIR}/${i}_Adult_WT.merged.bed  > ${i}_all.tmp
-awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5+$6}' ${i}_all.tmp > ${i}_all.merged.bed
-rm ${i}_all.tmp
 
 done

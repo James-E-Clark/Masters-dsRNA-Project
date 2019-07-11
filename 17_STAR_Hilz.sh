@@ -8,25 +8,24 @@
 #SBATCH -o logs/%x.%j.out
 #SBATCH -A scbsu
 
+STAR=/nobackup/proj/scbsu/software/STAR-2.6.0a/bin/Linux_x86_64/STAR
 module add SAMtools
 
-STAR=/nobackup/proj/scbsu/software/STAR-2.6.0a/bin/Linux_x86_64/STAR
-
 BASE_DIR=/nobackup/proj/scbsu/James_Clark
-GENOME_DIR=/nobackup/proj/scbsu/James_Clark/genome/STAR_HeLa_index
-OUT_DIR=${BASE_DIR}/STAR_HeLa_alignments
+GENOME_DIR=${BASE_DIR}/genome/STAR_Hilz_index
+OUT_DIR=${BASE_DIR}/STAR_Hilz_alignments
 
-mkdir -p ${OUT_DIR}
+mkdir ${OUT_DIR}
 
-for i in ${BASE_DIR}/SRA_runs_HeLa/*_1.fastq.gz
+for i in ${BASE_DIR}/trimmed_Hilz_fastq/*.fastq
 do
 
-SAMPLE=$(basename ${i} _1.fastq.gz)
+SAMPLE=$(basename ${i} .fastq)
 
 ${STAR} --runThreadN 11 \
         --genomeDir ${GENOME_DIR} \
         --genomeLoad NoSharedMemory \
-        --readFilesIn ${BASE_DIR}/SRA_runs_HeLa/${SAMPLE}_1.fastq.gz ${BASE_DIR}/SRA_runs_HeLa/${SAMPLE}_2.fastq.gz \
+        --readFilesIn ${BASE_DIR}/trimmed_Hilz_fastq/${SAMPLE}.fastq \
         --outSAMtype BAM SortedByCoordinate \
         --outFileNamePrefix ${OUT_DIR}/${SAMPLE} \
         --twopassMode Basic \

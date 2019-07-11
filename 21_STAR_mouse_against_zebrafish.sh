@@ -7,10 +7,10 @@ mkdir -p ${BASE_DIR}/zebrafish_genome/STAR_danrer_index
 mkdir -p ${OUT_DIR}
 
 # Generate genome
-#STAR --runThreadN 2 \
-#     --runMode genomeGenerate \
-#     --genomeDir ${BASE_DIR}/zebrafish_genome/STAR_danrer_index \
-#     --genomeFastaFiles ${BASE_DIR}/zebrafish_genome/zf-spike.fa
+STAR --runThreadN 2 \
+     --runMode genomeGenerate \
+     --genomeDir ${BASE_DIR}/zebrafish_genome/STAR_danrer_index \
+     --genomeFastaFiles ${BASE_DIR}/zebrafish_genome/zf-spike.fa
 
 # Run STAR
 

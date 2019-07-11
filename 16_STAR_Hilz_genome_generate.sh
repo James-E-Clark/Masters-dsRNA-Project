@@ -10,12 +10,12 @@
 
 STAR=/nobackup/proj/scbsu/software/STAR-2.6.0a/bin/Linux_x86_64/STAR
 BASE_DIR=/nobackup/proj/scbsu/James_Clark
-mkdir -p ${BASE_DIR}/genome/STAR_mm10_index
+mkdir -p ${BASE_DIR}/genome/STAR_Hilz_index
 
 ${STAR} --runThreadN 11 \
         --runMode genomeGenerate \
-        --genomeDir ${BASE_DIR}/genome/STAR_mm10_index \
+        --genomeDir ${BASE_DIR}/genome/STAR_Hilz_index \
         --genomeFastaFiles ${BASE_DIR}/genome/GRCm38.primary_assembly.genome.fa \
         --sjdbGTFfile ${BASE_DIR}/genome/gencode.vM20.annotation.gtf \
-        --sjdbOverhang 100 \
+        --sjdbOverhang 49 \
 --limitGenomeGenerateRAM=96000000000

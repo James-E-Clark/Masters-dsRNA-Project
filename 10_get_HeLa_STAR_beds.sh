@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALN_DIR=HeLa_STAR_alignments
+ALN_DIR=STAR_HeLa_alignments
 BED_DIR=HeLa_STAR_bed_files
 CHR_BED=gencode.v29.chromosomes.bed
 
@@ -19,21 +19,17 @@ do
 
 SAMPLE=$(basename ${i} .sorted.bam)
 
-# Remove any multi-mappers (keep reads denoted by NH:i:1 in STAR output)
+## Remove any multi-mappers (keep only primary alignments with SAM flag 256)
 samtools view -H ${ALN_DIR}/${SAMPLE}.sorted.bam > ${SAMPLE}.header.sam
-samtools view -F 4 ${ALN_DIR}/${SAMPLE}.sorted.bam |  grep -w 'NH:i:1' | cat ${SAMPLE}.header.sam - | \
-samtools view -b - > ${ALN_DIR}/${SAMPLE}.unique.bam
-samtools index ${ALN_DIR}/${SAMPLE}.unique.bam
+samtools view -F 256 ${ALN_DIR}/${SAMPLE}.sorted.bam | cat ${SAMPLE}.header.sam - > ${SAMPLE}.primary.sam
+samtools view -b ${SAMPLE}.primary.sam > ${ALN_DIR}/${SAMPLE}.primary.bam
+samtools index ${ALN_DIR}/${SAMPLE}.primary.bam
 rm ${SAMPLE}.header.sam
-#rm ${ALN_DIR}/${SAMPLE}.sorted.bam
+rm ${SAMPLE}.primary.sam
 
 echo "Running bedtools genomecov on sample ${SAMPLE}..."
 # Get read coverage
-bedtools genomecov -bg -ibam ${ALN_DIR}/${SAMPLE}.unique.bam > ${BED_DIR}/${SAMPLE}.bed
-
-echo "Running bedtools multicov on sample ${SAMPLE}..."
-# Get reads per chromosome
-bedtools multicov -bams ${ALN_DIR}/${SAMPLE}.unique.bam -bed genome/${CHR_BED} > ${BED_DIR}/${SAMPLE}.unique.reads.per.chr.bed
+bedtools genomecov -bg -ibam ${ALN_DIR}/${SAMPLE}.primary.bam > ${BED_DIR}/${SAMPLE}.primary.bed
 
 done
 
@@ -43,9 +39,9 @@ for i in siSUV3 siPNPase
 do
 
 echo "Merging ${i} bed files..."
-bedtools unionbedg -i ${BED_DIR}/${i}_rep1.bed ${BED_DIR}/${i}_rep2.bed > ${i}.tmp
+bedtools unionbedg -i ${BED_DIR}/${i}_rep1.primary.bed ${BED_DIR}/${i}_rep2.primary.bed > ${i}.tmp
 # Sum the coverage columns
-awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5}' ${i}.tmp > ${BED_DIR}/${i}.merged.bed
+awk 'BEGIN{FS=OFS="\t"} {print $1, $2, $3, $4+$5}' ${i}.tmp > ${BED_DIR}/${i}.merged.primary.bed
 rm ${i}.tmp
 
 done
