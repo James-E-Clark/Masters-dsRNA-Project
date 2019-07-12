@@ -23,6 +23,10 @@ echo "Running bedtools genomecov on sample ${SAMPLE}..."
 # Get read coverage
 bedtools genomecov -bg -ibam ${ALN_DIR}/${SAMPLE}.primary.bam > ${BED_DIR}/${SAMPLE}.primary.bed
 
+echo "Running bedtools multicov on sample ${SAMPLE}..."
+# Get reads per chromosome counting only proper pairs
+bedtools multicov -p -bams ${ALN_DIR}/${SAMPLE}.primary.bam -bed genome/${CHR_BED} > ${BED_DIR}/${SAMPLE}.primary.reads.per.chr.bed
+
 done
 
 # Merge replicates
