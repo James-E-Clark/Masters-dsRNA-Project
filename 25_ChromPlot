@@ -1,0 +1,53 @@
+#ChromPlot creates chromosome plots. Here dsRNA and siRNA were plotted against eachother. There are also examples #'ed out. https://bioconductor.org/packages/release/bioc/vignettes/chromPlot/inst/doc/chromPlot.pdf
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+  #install.packages("BiocManager")
+
+BiocManager::install("chromPlot")
+BiocManager::install("TxDb.Mmusculus.UCSC.mm10.knownGene")
+BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+
+library("TxDb.Mmusculus.UCSC.mm10.knownGene")
+library(GenomicFeatures)
+library(chromPlot)
+#library("TxDb.Hsapiens.UCSC.hg19.knownGene")
+
+# EXAMPLE THAT PLOTS ALL KNOWN GENES IN MOUSE GENOME
+#chromPlot(gaps=mm10_gap)
+#txdb <- TxDb.Mmusculus.UCSC.mm10.knownGene
+#txgr <- transcripts(txdb)
+#txgr
+#txdb
+#chromPlot(gaps=hg_gap, annot1=txgr)
+
+# EXAMPLE THAT PLOTS THE G BANDING OF ALL MOUSE CHROMOSOMES
+#data(mm10_gap)
+#data(mm10_cytoBandIdeo)
+#chromPlot(bands=mm10_cytoBandIdeo, gaps=mm10_gap)
+
+#ANDI
+WT <- read.table("Desktop/Hilz_R_WT_intersect.bed")
+KO <- read.table("Desktop/Hilz_DICER_KO_intersect.bed")
+colnames(WT) = c("Chrom", "Start", "End", "Coverage")
+colnames(KO) = c("Chrom", "Start", "End", "Coverage")
+data("mm10_gap")
+
+chromPlot(gaps = mm10_cytoBandIdeo, annot1=R, statCol=4, annot2=F,chrSide=c(-1,1,1,1,1,1,1,1), colAnnot2 = "Blue", title = "R and F dsRNA expression
+          
+R = Red, F = Blue")
+
+#R COMPARED TO GENE EXPRESSION
+G <- TxDb.Mmusculus.UCSC.mm10.knownGene
+tG <- transcripts(G)
+chromPlot(gaps = mm10_cytoBandIdeo, annot1=R, statCol=4, annot2=tG,chrSide=c(-1,1,1,1,1,1,1,1), colAnnot2 = "Blue", title = "dsRNA vs Gene expression in mouse testes
+          Red = dsRNA, Blue = Genes")
+chromPlot(gaps=mm10_gap, annot1=R,
+ segment=tG, chrSide=c(-1,1,1,1,1,1,1,1), )
+#DHIR
+D <- read.table("D:/James/Untreated.bed")
+colnames(D) = c("Chrom", "Start", "End", "Coverage")
+dG <- TxDb.Hsapiens.UCSC.hg19.knownGene
+tdG <- transcripts(dG)
+data("hg_gap")
+chromPlot(gaps = hg_gap, annot1=D, statCol=4, annot2=tG,chrSide=c(-1,1,1,1,1,1,1,1), colAnnot2 = "Blue", title = "dsRNA vs Gene expression HeLa cells")
+chromPlot(gaps=hg_gap, annot1=D,
+          segment=tdG, chrSide=c(-1,1,1,1,1,1,1,1), )
