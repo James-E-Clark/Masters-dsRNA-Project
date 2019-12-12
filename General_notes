@@ -1,0 +1,34 @@
+#File for general notes for navigating command line 
+
+#Running an interactive session in Rocket
+Run -p interactive —Pty /bin/bash
+
+#Some commands that will come in useful when navigating your own machine or the server though the SSH. 
+
+#!/bin/bash – this is commonly seen at the top of the scripts. The #! is saying that what comes next is the file path to the interpreter that will be used to make sense of the code. In this case bash is being used. /bin/bash is the file path to the bash interpreter, which recognises the commands being used in the scripts. 
+
+cd – “change directory” changes the current working directory to the file path specified after the command. 
+
+cd ../ - This command is particularly useful as it returns to the parent directory (one level above) it is vital for easily navigating file systems. 
+
+mkdir – “make directory” creates a directory (folder) in the current directory. 
+
+rm 'file' – “remove” deletes the file specified after the command. 
+
+rmdir – “remove directory” will delete a directory, further options have to be specified if the folder is not empty. 
+
+cp – “copy” will copy a file, first the file is specified then a space and then the desired location for the copy is specified. 
+
+mv – “move” will move a specified item, similar to copy in that the original file is not removed unless otherwise specified. It is also a method that can be used to rename a file or folder. 
+
+scp – “secure copy” is particularly important when trying to copy from one machine to another. This is necessary if trying to copy files from an SSH to a local computer. The username is written first, then the location of the desired file on the server, then the location for the file to be placed on the local machine. 
+
+General notes
+There are a few things to keep in mind for beginners when creating code 
+-	Don’t use spaces when naming files, use _ as spaces cause problems 
+-	Be mindful of which way your slashes are facing i.e. / or \. Remember different systems may use different slashes. 
+-	Remember everything is case sensitive
+-	If loading multiple packages in R, some may have functions with the same name, this leads to all but one of these conflictingly named functions being “masked” which means they will be effectively disabled. They can be re-enabled, or just load the package with the preferred function first. 
+-	Be sure to change all the necessary fields if re-using or using a sample code as a template. 
+-	The #SBATCH commands seen at the top of some of the codes are messages for the scheduler in charge of the job queues for the server 
+-	In several of the code examples, it begins with #!/bin/bash, this tells the machine the code language that is being used and where to find the interpreter for this language, to allow it to understand the commands being given. In this case the language is bash. 
