@@ -5,7 +5,7 @@
 grep -v "##" gencode.vM23.annotation.gtf > grep.gtf
 
 #If transcript id isnt present, this line of code makes sure there is something there and not just a blank space. Not always needed but makes the file more complete
-awk grep.gtf '{ if ($0 ~ "transcript_id") print $0; else print $0" transcript_id \"\";"; }' > grep.gtf
+awk '{ if ($0 ~ "transcript_id") print $0; else print $0" transcript_id \"\";"; }' grep.gtf > grep.gtf
 
 #Using gtf2bed to create a bedfile from the gtf. This is a BEDOPS programme (https://bedops.readthedocs.io/en/latest/content/reference/file-management/conversion/gtf2bed.html)
 gencode.vM23.annotation.gtf | gtf2bed - > mousegenes.bed
