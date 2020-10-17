@@ -23,6 +23,19 @@ mv – “move” will move a specified item, similar to copy in that the origin
 
 scp – “secure copy” is particularly important when trying to copy from one machine to another. This is necessary if trying to copy files from an SSH to a local computer. The username is written first, then the location of the desired file on the server, then the location for the file to be placed on the local machine. 
 
+ROCKET:
+When wanting to up and download files to and from roket from home, SCP can be used accross an SSH connection:
+In one terminal:
+ssh -N -L 1234:rocket.hpc.ncl.ac.uk:22 USERNAME@unix.ncl.ac.uk
+And enter password
+Then in seperate terminals:
+UPLOAD:
+scp -P 1234 ~/Desktop/SPACEONMYCOMPUTER/... USERNAME@localhost:/nobackup/proj/awed/james_clark/...
+Enter Password
+DOWNLOAD:
+scp -P 1234 -r USERNAME@localhost:/nobackup/proj/awed/james_clark/... ~/Desktop/SPACEONMYCOMPUTER/...
+Enter Password
+
 General notes
 There are a few things to keep in mind for beginners when creating code 
 -	Don’t use spaces when naming files, use _ as spaces cause problems 
