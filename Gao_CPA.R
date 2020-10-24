@@ -86,6 +86,8 @@ barplot(aCR1$percentage, las = 3)
 
 # Reset margins
 par(mar = c(5.1,4.1,4.1,2.1))
+
+# Write to an excel sheet for ease of use
 library(WriteXLS)
 WriteXLS(cov_table_merged, ExcelFileName = "Gao_INPUT_cov_table.xls", SheetNames = NULL, perl = "perl",
 
